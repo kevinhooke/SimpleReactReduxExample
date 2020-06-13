@@ -1,37 +1,25 @@
 import React, { Component } from 'react';
-import LabelStore from '../stores/LabelStore';
 
+import { connect } from "react-redux";
 
-class LabelComponent extends Component {
+const mapStateToProps = state => {
+    return { labelValue: state.labelValue };
+};
 
-    constructor(props) {
-        super(props);
+class ConnectedLabelComponent extends Component {
 
-        this.state = { labelValue : LabelStore.getData() };
-        //this is critical - to access 'this' and call setState you need to explicitylu bind:
-        this.onChange = this.onChange.bind(this);
-    }
-
-    componentWillMount() {
-        LabelStore.addChangeListener(this.onChange);
-    }
-
-    componentWillUnmount() {
-        LabelStore.removeChangeListener(this.onChange);
-    }
-
-    onChange() {
-        console.log('LabelComponent onChange triggered from LabelStore event');
-        this.setState({ labelValue : LabelStore.getData() });
-    }
+    // default constructor not needed
+    // constructor(props) {
+    //     super(props);
+    // }
 
     render() {
         return (
             <div className="label">
-                Text: { this.state.labelValue.labelValue.value }
+                Text: { this.props.labelValue }
             </div>
         );
     }
 }
-
+const LabelComponent = connect(mapStateToProps)(ConnectedLabelComponent);
 export default LabelComponent;
